@@ -87,6 +87,8 @@ public:
   //vector for incoming radar measurement
   VectorXd z_; // rho, phi, rho_dot
 
+  double NIS_laser_;
+  double NIS_radar_;
 
   /**
    * Constructor
@@ -137,6 +139,8 @@ public:
   * A helper function which will ensure an angle phi is between negative pi and pi
   */
   void NormalizeAngle(double& phi);
+
+  double CaluclateNIS(VectorXd z);
 
 };
 
