@@ -55,6 +55,11 @@ public:
   ///* Radar measurement noise standard deviation radius change in m/s
   double std_radrd_ ;
 
+  //set measurement dimension, radar can measure r, phi, and r_dot
+  int n_z_;
+
+  MatrixXd R_;
+
   ///* Weights of sigma points
   VectorXd weights_;
 
@@ -66,6 +71,21 @@ public:
 
   ///* Sigma point spreading parameter
   double lambda_;
+
+  //Augmented matrices
+  MatrixXd Xsig_aug_;
+
+  //create example matrix with sigma points in measurement space
+  MatrixXd Zsig_;
+  
+  //create example vector for mean predicted measurement
+  VectorXd z_pred_; //predicted rho, phi, rhodot
+
+  //matrix for predicted measurement covariance
+  MatrixXd S_;
+
+  //vector for incoming radar measurement
+  VectorXd z_; // rho, phi, rho_dot
 
 
   /**
@@ -102,6 +122,22 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  //Helper Fucntions
+
+  void AugmentedSigmaPoints();
+  void SigmaPointPrediction( double delta_t  );
+  void PredictMeanAndCovariance();
+
+  void PredictLidarMeasurement( VectorXd z );
+  void PredictRadarMeasurement( VectorXd z );
+  void UpdateState( VectorXd z );
+
+  /**
+  * A helper function which will ensure an angle phi is between negative pi and pi
+  */
+  void NormalizeAngle(double& phi);
+
 };
 
 #endif /* UKF_H */
